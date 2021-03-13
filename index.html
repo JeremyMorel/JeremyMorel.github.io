@@ -32,7 +32,7 @@ var username = "visitor@aaanortheast.com";
       "https://login.microsoftonline.com/extSTS.srf",
       requestOptions
     );
-    console.log("response: " + response);
+    console.log("response: " + JSON.stringify(response));
     const responseText = await response.text();
     console.log("responseText: " + responseText);
     const responseXml = await new DOMParser().parseFromString(
