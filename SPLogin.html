@@ -98,6 +98,8 @@ function refreshDigestViaREST(){
 	});
 }
 function CallSPOnline() {
+	document.location.href = siteUrl;
+	/*
    $.ajax({
 		url: siteUrl+"/_api/web",
 		dataType: 'JSON',
@@ -110,5 +112,6 @@ function CallSPOnline() {
 			alert(JSON.stringify(error));
 		}
 	});
+	*/
 }
 </script>
