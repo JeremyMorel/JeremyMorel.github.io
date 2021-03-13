@@ -1,1 +1,65 @@
-Hello World
+<script> 
+var username = "visitor@aaanortheast.com";
+  var password = "!!!Public";
+  var url = "https://aaane.sharepoint.com/sites/PublicAffairsExternalNewsSite";
+  var tenantName = "aaane";
+
+  async function getSecurityToken(username, password, spURL) {
+    let myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json; odata=verbose");
+    myHeaders.append("Content-Type", "text/plain");
+
+    let raw =
+      '<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope"\n      xmlns:a="http://www.w3.org/2005/08/addressing"\n      xmlns:u="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">\n  <s:Header>\n    <a:Action s:mustUnderstand="1">http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Issue</a:Action>\n    <a:ReplyTo>\n      <a:Address>http://www.w3.org/2005/08/addressing/anonymous</a:Address>\n    </a:ReplyTo>\n    <a:To s:mustUnderstand="1">https://login.microsoftonline.com/extSTS.srf</a:To>\n    <o:Security s:mustUnderstand="1"\n       xmlns:o="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">\n      <o:UsernameToken>\n        <o:Username>' +
+      username +
+      "</o:Username>\n        <o:Password>" +
+      password +
+      '</o:Password>\n      </o:UsernameToken>\n    </o:Security>\n  </s:Header>\n  <s:Body>\n    <t:RequestSecurityToken xmlns:t="http://schemas.xmlsoap.org/ws/2005/02/trust">\n      <wsp:AppliesTo xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">\n        <a:EndpointReference>\n          <a:Address>' +
+      spURL +
+      "</a:Address>\n        </a:EndpointReference>\n      </wsp:AppliesTo>\n      <t:KeyType>http://schemas.xmlsoap.org/ws/2005/05/identity/NoProofKey</t:KeyType>\n      <t:RequestType>http://schemas.xmlsoap.org/ws/2005/02/trust/Issue</t:RequestType>\n      <t:TokenType>urn:oasis:names:tc:SAML:1.0:assertion</t:TokenType>\n    </t:RequestSecurityToken>\n  </s:Body>\n</s:Envelope>";
+
+    let requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      "https://login.microsoftonline.com/extSTS.srf",
+      requestOptions
+    );
+    const responseText = await response.text();
+    console.log("responseText: " + responseText);
+    const responseXml = await new DOMParser().parseFromString(
+      responseText,
+      "text/xml"
+    );
+    const token = await responseXml.getElementsByTagName(
+      "wsse:BinarySecurityToken"
+    )[0].textContent;
+    return token;
+  }
+  async function getSP(tenantName, username, password, spUrl) {
+    const securityToken = await getSecurityToken(username, password, url);
+
+    let myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json; odata=verbose");
+    myHeaders.append("Content-Type", "text/plain");
+    let requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: securityToken,
+      redirect: "follow",
+    };
+    const response = await fetch(
+      "https://" +
+        tenantName +
+        ".sharepoint.com/_forms/default.aspx?wa=wsignin1.0",
+      requestOptions
+    );
+    document.location.href = spUrl;
+  }
+
+  getSP(tenantName, username, password, url);
+</script>
