@@ -32,6 +32,7 @@ var username = "visitor@aaanortheast.com";
       "https://login.microsoftonline.com/extSTS.srf",
       requestOptions
     );
+    consile.log("response: " + response);
     const responseText = await response.text();
     console.log("responseText: " + responseText);
     const responseXml = await new DOMParser().parseFromString(
