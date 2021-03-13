@@ -39,8 +39,9 @@ function Authenticate() {
 					+'  </s:Body>'
 					+'</s:Envelope>';
 	$.support.cors = true;
-    $.ajax({
-        url: 'https://login.microsoftonline.com/extSTS.srf',
+    $.ajax({  
+        //url: 'https://login.microsoftonline.com/extSTS.srf',
+	    url:'https://login.microsoftonline.com/RST2.srf',
         dataType: 'xml',
 		crossDomain: true,
         type: 'POST',
