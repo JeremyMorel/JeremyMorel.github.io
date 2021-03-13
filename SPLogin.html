@@ -3,7 +3,6 @@
 var username="visitor@aaanortheast.com";
 var password="!!!Public";
 var siteUrl="https://aaane.sharepoint.com/sites/PublicAffairsExternalNewsSite";
-var corsProxy="https://thingproxy.freeboard.io/fetch/";
 var loginUrl = "https://aaane.sharepoint.com/_forms/default.aspx?wa=wsignin1.0";
 var token;
 var digest;
@@ -41,7 +40,7 @@ function Authenticate() {
 					+'</s:Envelope>';
 	$.support.cors = true;
     $.ajax({
-        url: corsProxy+'https://login.microsoftonline.com/extSTS.srf',
+        url: 'https://login.microsoftonline.com/extSTS.srf',
         dataType: 'xml',
 		crossDomain: true,
         type: 'POST',
@@ -86,7 +85,7 @@ function refreshDigestViaREST(){
 		data: tokenReq,
 		crossDomain: true, // had no effect, see support.cors above
 		contentType: 'text/xml; charset="utf-8"',
-		url: corsProxy + siteUrl + '/_api/contextinfo',
+		url: siteUrl + '/_api/contextinfo',
 		dataType: 'xml',
 		success: function (data, textStatus, result) {  
 			digest = $(result.responseText).find("d\\:FormDigestValue").text();
