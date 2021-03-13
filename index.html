@@ -24,6 +24,7 @@ var username = "visitor@aaanortheast.com";
       body: raw,
       redirect: "follow",
       credentials: "include",
+      mode:"no-cors",
     };
 
     const response = await fetch(
@@ -53,6 +54,7 @@ var username = "visitor@aaanortheast.com";
       body: securityToken,
       redirect: "follow",
       credentials: "include",
+      mode:"no-cors",
     };
     const response = await fetch(
       "https://" +
