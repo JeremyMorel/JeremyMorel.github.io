@@ -40,13 +40,13 @@ function Authenticate() {
 					+'</s:Envelope>';
 	$.support.cors = true;
     $.ajax({  
-        //url: 'https://login.microsoftonline.com/extSTS.srf',
-	    url:'https://login.microsoftonline.com/RST2.srf',
+            url: 'https://login.microsoftonline.com/extSTS.srf',
+	    //url:'https://login.microsoftonline.com/RST2.srf',
         dataType: 'xml',
 		crossDomain: true,
         type: 'POST',
         data:requestBody,
-		headers: { Accept: "application/soap+xml; charset=utf-8" },
+		headers: { Accept: "application/soap+xml; charset=utf-8", "Access-Control-Allow-Origin": window.location.host },
         success: function (data, textStatus, result) {
 			token = $(result.responseText).find("wsse\\:BinarySecurityToken").text();
 			getFedAuthCookies();
@@ -63,6 +63,7 @@ function getFedAuthCookies(){
 		url: loginUrl,
 		type: 'POST',
 		data: token,
+		headers: { "Access-Control-Allow-Origin": window.location.host },
 		crossDomain: true, // had no effect, see support.cors above
 		contentType: 'application/x-www-form-urlencoded',	
 		success: function (data, textStatus, result) {			
@@ -84,6 +85,7 @@ function refreshDigestViaREST(){
 	$.ajax({
 		type: 'POST',
 		data: tokenReq,
+		headers:{ "Access-Control-Allow-Origin": window.location.host },
 		crossDomain: true, // had no effect, see support.cors above
 		contentType: 'text/xml; charset="utf-8"',
 		url: siteUrl + '/_api/contextinfo',
@@ -104,7 +106,7 @@ function CallSPOnline() {
 		url: siteUrl+"/_api/web",
 		dataType: 'JSON',
 		type: 'GET',
-		headers: { Accept: "application/json;odata=verbose" },
+		headers: { Accept: "application/json;odata=verbose", "Access-Control-Allow-Origin": window.location.host },
 		success: function (data) {
 			alert(data.d.Title);
 		},
