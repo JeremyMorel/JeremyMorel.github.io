@@ -43,6 +43,9 @@ function Authenticate() {
             url: 'https://login.microsoftonline.com/extSTS.srf',
 	    //url:'https://login.microsoftonline.com/RST2.srf',
         dataType: 'xml',
+	    xhrFields: {
+       withCredentials: true
+    },
 		crossDomain: true,
         type: 'POST',
         data:requestBody,
@@ -64,6 +67,9 @@ function getFedAuthCookies(){
 		type: 'POST',
 		data: token,
 		headers: { "Access-Control-Allow-Origin": window.location.host },
+		xhrFields: {
+       withCredentials: true
+    },
 		crossDomain: true, // had no effect, see support.cors above
 		contentType: 'application/x-www-form-urlencoded',	
 		success: function (data, textStatus, result) {			
@@ -86,6 +92,9 @@ function refreshDigestViaREST(){
 		type: 'POST',
 		data: tokenReq,
 		headers:{ "Access-Control-Allow-Origin": window.location.host },
+		xhrFields: {
+       withCredentials: true
+    },
 		crossDomain: true, // had no effect, see support.cors above
 		contentType: 'text/xml; charset="utf-8"',
 		url: siteUrl + '/_api/contextinfo',
